@@ -22,51 +22,48 @@ public class TestSuit extends TopMenuTest {
     @Test
     public void name() throws InterruptedException {
 
-//	1.1 Click on Computer Menu.
-        selectMenu("Computers");
 //            1.2 Click on Desktop
         selectMenu("Desktops");
         // Mouse hover on “Sort By” and select “Price low-high and getting pricelist  before filter
-        List<WebElement> beforepricelists = driver.findElements(By.xpath("//div[@class='prices']"));
-        //converting in double for price
-        List<Double> beforFilterprodcutprice = new ArrayList<>();
+        List<WebElement> beforepricelists = driver.findElements(By.xpath("//div[@class='item-box']/child::div/descendant::span"));
+        //converting in string for price
+        List<String> beforFilterprodcutprice = new ArrayList<>();
         Thread.sleep(5000);
         //removing$ from price and storing in double datatype
         for (WebElement value : beforepricelists) {
-            beforFilterprodcutprice.add(Double.valueOf(value.getText().replace("$", "")));
+            beforFilterprodcutprice.add(String.valueOf(value.getText().replace("$", "")));
         }
-        List<WebElement> beforepricelists1 = driver.findElements(By.xpath("//div[@class='prices']"));
         //converting in double for price
         List<Double> beforFilterprodcutprice1 = new ArrayList<>();
         Thread.sleep(5000);
         //removing$ from price and storing in double datatype
-        for (WebElement value : beforepricelists1) {
-            beforFilterprodcutprice.add(Double.valueOf(value.getText().replace(",", "")));
+        for (String value : beforFilterprodcutprice ) {
+            beforFilterprodcutprice1.add(Double.valueOf(value.replace(",", "")));
         }
+        //sorting
+        Collections.sort(beforFilterprodcutprice1);
+
         //clicking on high to low price filter
-        clickOnElement(By.xpath("(By.xpath(\"//select[@id='products-orderby']\")"));
         selectByVisibleTextFromDropDown(By.xpath("//select[@id='products-orderby']"), "Price: Low to High");
         // store the all product price
         Thread.sleep(5000);
-        List<WebElement> afterpicelists = driver.findElements(By.xpath("//select[@id='products-orderby']"));
+        List<WebElement> afterpicelists = driver.findElements(By.xpath("//div[@class='item-box']/child::div/descendant::span"));
         //converting in double
-        List<Double> afterFilterPriceList = new ArrayList<>();
+        List<String> afterFilterPriceList = new ArrayList<>();
         //removing $ and,from price
         for (WebElement value : afterpicelists) {
-            afterFilterPriceList.add(Double.valueOf(value.getText().replace("$", "")));
+            afterFilterPriceList.add(String.valueOf(value.getText().replace("$", "")));
         }
-        List<WebElement> afterpicelists1 = driver.findElements(By.xpath("//select[@id='products-orderby']"));
         //converting in double
         List<Double> afterFilterPriceList1 = new ArrayList<>();
         //removing $ and,from price
-        for (WebElement value : afterpicelists1) {
-            afterFilterPriceList.add(Double.valueOf(value.getText().replace(",", "")));
+        for (String value : afterFilterPriceList) {
+            afterFilterPriceList1.add(Double.valueOf(value.replace(",", "")));
         }
-        //sorting data
-        Collections.sort(beforFilterprodcutprice, Collections.reverseOrder());
+
         Thread.sleep(5000);
         // // Verify that the product’s price arrange low to high
-        Assert.assertEquals("verify pricelist starting low to high ", beforFilterprodcutprice, afterFilterPriceList);
+        Assert.assertEquals("verify pricelist starting low to high ", beforFilterprodcutprice1, afterFilterPriceList1);
 
     }
 
